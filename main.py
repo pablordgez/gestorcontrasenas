@@ -2,18 +2,26 @@ import pickle
 from pyDes import *
 psswd = pickle.load( open("contra.p", "rb"))
 def readpsswd():
-    wnted = input("¿Qué contraseña buscas?\n")
+    wnted = input("¿Qué contraseña buscas?\n") 
     cifrado = input("\n¿Cuál es la clave de cifrado?\n")
-    wntedpsswd = triple_des(cifrado).decrypt(psswd[wnted], padmode=2)
-    print("\nLa contraseñla de "+ wnted +" es "+wntedpsswd.decode("utf-8"))
-    input("\nPulsa enter")
+    try:
+        wntedpsswd = triple_des(cifrado).decrypt(psswd[wnted], padmode=2)
+        print("\nLa contraseñla de "+ wnted +" es "+wntedpsswd.decode("utf-8"))
+        input("\nPulsa enter")
+    except:
+        print("\nClave de cifrado incorrecta (o la contraseña no existe)")
+        input("\nPulsa enter")
 def writepsswd():
     wnted = input("¿Qué contraseña quieres añadir o cambiar?\n")
     password = input("\n¿Cuál es la contraseña?\n")
     cifrado = input("\n¿Cuál es la clave de cifrado?\n")
-    psswd[wnted] = triple_des(cifrado).encrypt(password, padmode = 2)
-    print("\nContraseña añadida/actualizada")
-    input("\nPulsa enter")
+    try:
+        psswd[wnted] = triple_des(cifrado).encrypt(password, padmode = 2)
+        print("\nContraseña añadida/actualizada")
+        input("\nPulsa enter")
+    except:
+        print("\nLa clave de cifrado debe tener 16 o 24 caracteres")
+        input("\nPulsa enter")
 def guardar():
     pickle.dump(psswd, open("contra.p", "wb"))
     print("\nSe han guardado los cambios")
